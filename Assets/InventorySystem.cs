@@ -6,16 +6,22 @@ public class InventorySystem : MonoBehaviour
 {
     [Header("Inventory Properties")]
     public List<string> itemTypes = new List<string>();
+    public List<string> equipmentTypes = new List<string>();
 
     [Header("Hotbar Item Slots")]
     public Transform hotbarItemSlotsParent;
     public List<HotbarItemSlot> hotbarItemSlots = new List<HotbarItemSlot>();
+
+    [Header("Inventory Item Slots")]
+    public Transform inventoryItemSlotsParent;
+    public List<InventoryItemSlot> inventoryItemSlots = new List<InventoryItemSlot>();
 
     public ItemTemplate test;
 
     private void OnValidate()
     {
         PopulateHotbarItemSlots();
+        PopulateInventoryItemSlots();
     }
 
     private void Update()
@@ -40,6 +46,25 @@ public class InventorySystem : MonoBehaviour
                 if (!hotbarItemSlots.Contains(hotbarItemSlotsParent.GetChild(i).GetComponent<HotbarItemSlot>()))
                 {
                     hotbarItemSlots.Add(hotbarItemSlotsParent.GetChild(i).GetComponent<HotbarItemSlot>());
+                }
+            }
+        }
+    }
+
+    private void PopulateInventoryItemSlots()
+    {
+        if (inventoryItemSlotsParent != null)
+        {
+            if (inventoryItemSlots.Count > inventoryItemSlotsParent.childCount)  //If the editor detects that there are more slots in the list than there should be, we clear the entire list completely.
+            {
+                inventoryItemSlots.Clear();
+            }
+
+            for (int i = 0; i < inventoryItemSlotsParent.childCount; i++)   //Repopulate the list with hotbar slots found with the parent.
+            {
+                if (!inventoryItemSlots.Contains(inventoryItemSlotsParent.GetChild(i).GetComponent<InventoryItemSlot>()))
+                {
+                    inventoryItemSlots.Add(inventoryItemSlotsParent.GetChild(i).GetComponent<InventoryItemSlot>());
                 }
             }
         }

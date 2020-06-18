@@ -26,8 +26,8 @@ public class HotbarItemSlot : MonoBehaviour
 
 
 
-    private int slotItemAmount;
-    public int SlotItemAmount
+    private uint slotItemAmount;
+    public uint SlotItemAmount
     {
         get
         {

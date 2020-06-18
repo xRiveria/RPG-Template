@@ -10,7 +10,8 @@ public class ItemTypeEditor : MonoBehaviour
     {
         InventorySystem inventorySystem;
         public string filePath = "Assets/";
-        [Tooltip("The name of the created class.")] public string fileName = "ItemTypes";
+        [Tooltip("The name of the created Item Types class.")] public string fileItemTypesName = "ItemTypes";
+        [Tooltip("The name of the created Equipment Types class.")] public string fileEquipmentTypesName = "EquipmentTypes";
 
         private void OnEnable()
         {
@@ -23,12 +24,22 @@ public class ItemTypeEditor : MonoBehaviour
             EditorGUILayout.BeginVertical("box");
             GUILayout.Label("'Save your created item types upon editing the ItemTypes list in the Inventory System'");
             EditorGUILayout.Space();
+
             filePath = EditorGUILayout.TextField("Path", filePath);
-            fileName = EditorGUILayout.TextField("Name", fileName);
+
+            fileItemTypesName = EditorGUILayout.TextField("Name", fileItemTypesName);
+            fileEquipmentTypesName = EditorGUILayout.TextField("Name", fileEquipmentTypesName);
+
             EditorGUILayout.Space();
-            if (GUILayout.Button("Save"))
+
+            if (GUILayout.Button("Save Item Types"))
             {
-                EditorMethods.WriteToEnum(filePath, fileName, inventorySystem.itemTypes);
+                EditorMethods.WriteToEnum(filePath, fileItemTypesName, inventorySystem.itemTypes);
+            }
+
+            if (GUILayout.Button("Save Equipment Types"))
+            {
+                EditorMethods.WriteToEnum(filePath, fileEquipmentTypesName, inventorySystem.equipmentTypes);
             }
             EditorGUILayout.EndVertical();
         }
