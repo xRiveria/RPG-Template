@@ -5,5 +5,8 @@ public enum ItemTypes
 	Chestplate = 2,
 	Leggings = 3,
 	Boots = 4,
-
+	Gloves = 5,
+	Accessory = 6,
+	MainWeapon = 7,
+	SupportWeapon = 8
 }

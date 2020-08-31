@@ -9,6 +9,7 @@ public class ItemTemplate : ScriptableObject
     [SerializeField] private string itemName;
     [SerializeField] private Sprite itemSprite;
     [SerializeField] private ItemTypes itemType;
+    [SerializeField] private ItemCategories itemCategory;
     [SerializeField] private int itemMaxStackSize;
 
     public string GetItemName()
@@ -24,6 +25,11 @@ public class ItemTemplate : ScriptableObject
     public ItemTypes GetItemType()
     {
         return itemType;
+    }
+
+    public ItemCategories GetItemCategory()
+    {
+        return itemCategory;
     }
 
     public int GetItemMaxStackSize()
