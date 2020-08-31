@@ -9,7 +9,7 @@ using UnityEngine;
 // - Skills, Potions, Crafting etc.
 
 
-public class InventorySystem : MonoBehaviour, IItemStorage
+public class InventorySystem : MonoBehaviour
 {
     [Header("Inventory Properties")]
     public List<string> itemTypes = new List<string>();
@@ -43,13 +43,14 @@ public class InventorySystem : MonoBehaviour, IItemStorage
         inventorySystem = this;
     }
 
+    #region Auto Population
     public void PopulateWithRandomItem()
     {
         int random = Random.Range(0, randomItems.Count);
-        AcceptItem(randomItems[random]);
+        CanAcceptItem(randomItems[random]);
     }
 
-    private void PopulateHotbarItemSlots()     
+    private void PopulateHotbarItemSlots()
     {
         if (hotbarItemSlotsParent != null) 
         {
@@ -106,45 +107,73 @@ public class InventorySystem : MonoBehaviour, IItemStorage
         }
     }
 
-    public void AcceptItem(ItemTemplate itemToAccept)
-    {
+    #endregion
+
+    public bool CanAcceptItem(ItemTemplate itemToAccept)
+    { 
         foreach (HotbarItemSlot itemSlot in hotbarItemSlots)
         {
-            if (itemSlot.SlotItem != null && itemSlot.SlotItem == itemToAccept && itemSlot.SlotItemAmount < itemToAccept.GetItemMaxStackSize())
+            //If the item slot isn't empty...
+            if (itemSlot.SlotItem != null)
             {
-                Debug.Log("Increment Item!");
-                itemSlot.SlotItemAmount++;
-                return;
+                //If the item in the item slot is the same as the incoming item...
+                if (itemSlot.SlotItem == itemToAccept && itemSlot.SlotItemAmount < itemToAccept.GetItemMaxStackSize())
+                {
+                    IncrementItemSlotStack(itemSlot, itemToAccept);
+                    return true;
+                }
+                else
+                {
+                    continue;
+                }
             }
-            else if (itemSlot.SlotItem == null)
+            else
             {
-                Debug.Log("Insert Item!");
-                itemSlot.SlotItem = itemToAccept;
-                itemSlot.SlotItemAmount++;
-                return;
+                AddItemToNewSlot(itemSlot, itemToAccept);
+                return true;
             }
         }
 
-        //
         foreach (InventoryItemSlot itemSlot in inventoryItemSlots)
         {
-            if (itemSlot.SlotItem != null && itemSlot.SlotItem == itemToAccept && itemSlot.SlotItemAmount < itemToAccept.GetItemMaxStackSize())
+            //If the item slot isn't empty...
+            if (itemSlot.SlotItem != null)
             {
-                Debug.Log("Increment Item!");
-                itemSlot.SlotItemAmount++;
-                return;
+                //If the item in the item slot is the same as the incoming item...
+                if (itemSlot.SlotItem == itemToAccept && itemSlot.SlotItemAmount < itemToAccept.GetItemMaxStackSize())
+                {
+                    IncrementItemSlotStack(itemSlot, itemToAccept);
+                    return true;
+                }
+                else
+                {
+                    continue;
+                }
             }
-            else if (itemSlot.SlotItem == null)
+            else
             {
-                Debug.Log("Insert Item!");
-                itemSlot.SlotItem = itemToAccept;
-                itemSlot.SlotItemAmount++;
-                return;
+                AddItemToNewSlot(itemSlot, itemToAccept);
+                return true;
             }
         }
 
-        Debug.Log("Inventory Full!");
-    }    
+        Debug.Log("Entire inventory is full...");
+        return false;
+    }
+
+    private void AddItemToNewSlot(BaseItemSlot itemSlot, ItemTemplate itemToAccept)
+    {
+        itemSlot.SlotItem = itemToAccept;
+        itemSlot.SlotItemAmount++;
+    }
+
+    private void IncrementItemSlotStack(BaseItemSlot itemSlot, ItemTemplate itemToAccept)
+    {
+        //If the item slot's current item amount is less than its maximum stack size...
+        itemSlot.SlotItemAmount++;
+    }
+
+ 
 
     public void EquipItem(EquipmentItemSlot equipmentSlot, BaseItemSlot itemSlot, ItemTemplate equipmentToAccept)
     {
@@ -158,10 +187,6 @@ public class InventorySystem : MonoBehaviour, IItemStorage
         }
     }
 
-    public void RemoveItem(ItemTemplate itemToRemove)
-    {
-
-    }
 }
 
 

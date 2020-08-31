@@ -33,7 +33,7 @@ public class BaseItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     public Text slotAmountText;
 
     private uint slotItemAmount;
-    public uint SlotItemAmount
+    public virtual uint SlotItemAmount
     {
         get
         {
@@ -91,21 +91,34 @@ public class BaseItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         Destroy(slotImageReplica.gameObject);
     }
 
-    void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
+    public virtual void OnEquipmentRightClick(PointerEventData eventData)
     {
-        if (eventData.button == PointerEventData.InputButton.Right)
+        if (slotItem != null && slotItem.GetItemCategory() == ItemCategories.Equipment)
         {
-            if (slotItem != null && slotItem.GetItemCategory() == ItemCategories.Equipment)
+            foreach (EquipmentItemSlot equipmentSlot in InventorySystem.inventorySystem.equipmentItemSlots)
             {
-                foreach (EquipmentItemSlot equipmentSlot in InventorySystem.inventorySystem.equipmentItemSlots)
+                if (equipmentSlot.slotEquipmentType == slotItem.GetItemType())
                 {
-                    if (equipmentSlot.slotEquipmentType == slotItem.GetItemType())
+                    if (equipmentSlot.SlotItem == null)
                     {
                         InventorySystem.inventorySystem.EquipItem(equipmentSlot, this, slotItem);
                         return;
                     }
+                    else
+                    {
+                        SwapItems(equipmentSlot);
+                        return;
+                    }
                 }
             }
+        }
+    }
+
+    void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            OnEquipmentRightClick(eventData);
         }
     }
 
