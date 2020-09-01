@@ -173,8 +173,6 @@ public class InventorySystem : MonoBehaviour
         itemSlot.SlotItemAmount++;
     }
 
- 
-
     public void EquipItem(EquipmentItemSlot equipmentSlot, BaseItemSlot itemSlot, ItemTemplate equipmentToAccept)
     {
         if (equipmentSlot.slotEquipmentType == equipmentToAccept.GetItemType())

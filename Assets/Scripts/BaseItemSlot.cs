@@ -78,7 +78,7 @@ public class BaseItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         {
             BaseItemSlot itemSlot = eventData.pointerCurrentRaycast.gameObject.GetComponent<BaseItemSlot>();
 
-            if (itemSlot is EquipmentItemSlot)
+            if (itemSlot is EquipmentItemSlot && slotItem.GetItemCategory() == ItemCategories.Equipment)
             {
                 InventorySystem.inventorySystem.EquipItem(itemSlot as EquipmentItemSlot, this, SlotItem);
             }
@@ -87,7 +87,6 @@ public class BaseItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                 SwapItems(itemSlot);
             }
         }
-
         Destroy(slotImageReplica.gameObject);
     }
 
